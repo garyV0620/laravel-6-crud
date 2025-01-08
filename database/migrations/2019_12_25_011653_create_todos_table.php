@@ -18,7 +18,7 @@ class CreateTodosTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('user_id');
-            $table->enum('status', ['pending','completed']);
+            $table->enum('status', ['pending', 'completed']);
             $table->timestamps();
         });
     }

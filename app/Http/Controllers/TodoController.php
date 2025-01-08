@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Todo;
 use Auth;
+use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
@@ -16,8 +17,10 @@ class TodoController extends Controller
     {
         $userId = Auth::user()->id;
         $todos = Todo::where(['user_id' => $userId])->get();
+
         return view('todo.list', ['todos' => $todos]);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -27,10 +30,10 @@ class TodoController extends Controller
     {
         return view('todo.add');
     }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -44,8 +47,10 @@ class TodoController extends Controller
         } else {
             $request->session()->flash('error', 'Oops something went wrong, Todo not saved');
         }
+
         return redirect('todo');
     }
+
     /**
      * Display the specified resource.
      *
@@ -56,11 +61,13 @@ class TodoController extends Controller
     {
         $userId = Auth::user()->id;
         $todo = Todo::where(['user_id' => $userId, 'id' => $id])->first();
-        if (!$todo) {
+        if (! $todo) {
             return redirect('todo')->with('error', 'Todo not found');
         }
+
         return view('todo.view', ['todo' => $todo]);
     }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -72,15 +79,15 @@ class TodoController extends Controller
         $userId = Auth::user()->id;
         $todo = Todo::where(['user_id' => $userId, 'id' => $id])->first();
         if ($todo) {
-            return view('todo.edit', [ 'todo' => $todo ]);
+            return view('todo.edit', ['todo' => $todo]);
         } else {
             return redirect('todo')->with('error', 'Todo not found');
         }
     }
+
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -88,7 +95,7 @@ class TodoController extends Controller
     {
         $userId = Auth::user()->id;
         $todo = Todo::find($id);
-        if (!$todo) {
+        if (! $todo) {
             return redirect('todo')->with('error', 'Todo not found.');
         }
         $input = $request->input();
@@ -100,6 +107,7 @@ class TodoController extends Controller
             return redirect('todo')->with('error', 'Oops something went wrong. Todo not updated');
         }
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -111,7 +119,7 @@ class TodoController extends Controller
         $userId = Auth::user()->id;
         $todo = Todo::where(['user_id' => $userId, 'id' => $id])->first();
         $respStatus = $respMsg = '';
-        if (!$todo) {
+        if (! $todo) {
             $respStatus = 'error';
             $respMsg = 'Todo not found';
         }
@@ -123,6 +131,7 @@ class TodoController extends Controller
             $respStatus = 'error';
             $respMsg = 'Oops something went wrong. Todo not deleted successfully';
         }
+
         return redirect('todo')->with($respStatus, $respMsg);
     }
 }
